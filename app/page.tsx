@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useAccount, useSendTransaction, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { encodePacked } from "viem";
 import { minikitConfig } from "../minikit.config";
 import styles from "./page.module.css";
 
@@ -56,6 +55,17 @@ const shortAddress = (value?: string) => {
 };
 
 const clampScore = (value: number) => Math.min(Math.max(value, 0), MAX_SCORE);
+
+const formatTxError = (error: unknown) => {
+  if (!error) return "";
+  if (typeof error === "string") return error;
+  if (error instanceof Error && error.message) return error.message;
+  if (typeof error === "object" && error && "shortMessage" in error) {
+    const shortMessage = (error as { shortMessage?: string }).shortMessage;
+    if (shortMessage) return shortMessage;
+  }
+  return "Неизвестная ошибка транзакции.";
+};
 
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
@@ -145,8 +155,10 @@ export default function Home() {
   }, [isConfirmed]);
 
   useEffect(() => {
-    if (writeError || confirmError || sendError) {
-      setError("Не удалось отправить транзакцию. Попробуйте снова.");
+    const txError = writeError ?? sendError ?? confirmError;
+    if (txError) {
+      const details = formatTxError(txError);
+      setError(`Не удалось отправить транзакцию. ${details}`);
       setIsSubmitted(false);
     }
   }, [writeError, confirmError, sendError]);
@@ -266,14 +278,9 @@ export default function Home() {
           args: [BigInt(score), GAME_ID, BigInt(roundDayId)],
         });
       } else {
-        const data = encodePacked(
-          ["string", "uint256", "uint256", "uint256"],
-          ["BodyaDaily", BigInt(score), GAME_ID, BigInt(roundDayId)]
-        );
         sendTransaction({
           to: address,
           value: BigInt(0),
-          data,
         });
       }
     } catch {
