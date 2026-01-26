@@ -1,126 +1,248 @@
 .container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-  color: white;
+  gap: 1.5rem;
+  padding: 1.5rem 1.25rem 2rem;
+  background: radial-gradient(circle at top, #2a1242 0%, #0c0d1f 45%, #05060f 100%);
+  color: #f9f5ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.topBanner {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffe3ff;
+  text-shadow: 0 0 12px rgba(255, 150, 220, 0.7);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.metric {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.metricValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.hurry {
+  color: #ff8a8a;
+  text-shadow: 0 0 12px rgba(255, 138, 138, 0.8);
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.catFrame {
+  width: min(80vw, 320px);
+  height: min(80vw, 320px);
+  border-radius: 50%;
+  background: url("/tap-cat.jpg") center/cover no-repeat;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
   position: relative;
 }
 
-.closeButton {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  width: 40px;
-  height: 40px;
+.hurryFrame {
+  box-shadow: 0 0 30px rgba(255, 100, 120, 0.7);
+  animation: pulse 0.8s infinite;
+}
+
+.catButton {
+  width: 85%;
+  height: 85%;
   border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
+  display: grid;
+  place-items: center;
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
+  box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.15);
 }
 
-.closeButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
+.catButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  filter: grayscale(0.2);
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 2rem;
+.tapPulse {
+  transform: scale(0.98);
 }
 
-.waitlistForm {
+
+.helperText {
   text-align: center;
-  max-width: 600px;
-  width: 100%;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 320px;
 }
 
-.title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 3rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 300;
-}
-
-.form {
+.actions {
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
   align-items: center;
-  gap: 1rem;
-  width: 100%;
 }
 
-.emailInput {
+.primaryButton {
   width: 100%;
-  max-width: 400px;
-  padding: 1rem 1.5rem;
+  max-width: 280px;
+  border: none;
+  padding: 0.9rem 1.5rem;
   font-size: 1rem;
+  font-weight: 700;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffcf55, #ff7ad9);
+  color: #1a0b22;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(255, 122, 217, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.primaryButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.statusRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.statusBadge,
+.statusBadgeSuccess {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.emailInput::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.emailInput:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+.statusBadgeSuccess {
+  background: rgba(108, 255, 180, 0.18);
+  border-color: rgba(108, 255, 180, 0.45);
+  color: #c9ffdc;
 }
 
 .error {
-  color: #ff6b6b;
+  color: #ff9b9b;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.leaderboard {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.leaderboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
   font-size: 0.9rem;
-  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.joinButton {
-  background: #f7d954;
-  color: #000;
-  border: none;
-  padding: 1rem 3rem;
+.leaderboardHeader h2 {
   font-size: 1rem;
-  font-weight: 700;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 1rem;
-  box-shadow: 0 4px 20px rgba(247, 217, 84, 0.3);
+  color: #fff;
 }
 
-.joinButton:hover {
-  background: #f5d73a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(247, 217, 84, 0.4);
+.leaderboardList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.leaderboardItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.6rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rank {
+  font-weight: 700;
+}
+
+.player {
+  font-family: var(--font-source-code-pro), monospace;
+  font-size: 0.85rem;
+}
+
+.score {
+  font-weight: 600;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.toast {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
