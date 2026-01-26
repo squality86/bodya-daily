@@ -272,7 +272,7 @@ export default function Home() {
         );
         sendTransaction({
           to: address,
-          value: 0n,
+          value: BigInt(0),
           data,
         });
       }
