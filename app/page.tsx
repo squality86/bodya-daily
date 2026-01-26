@@ -1,7 +1,8 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { encodePacked } from "viem";
 import { minikitConfig } from "../minikit.config";
 import styles from "./page.module.css";
 
@@ -59,11 +60,23 @@ const clampScore = (value: number) => Math.min(Math.max(value, 0), MAX_SCORE);
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { address, isConnected } = useAccount();
-  const { writeContract, data: txHash, error: writeError, isPending } = useWriteContract();
+  const {
+    writeContract,
+    data: contractHash,
+    error: writeError,
+    isPending: isContractPending,
+  } = useWriteContract();
+  const {
+    sendTransaction,
+    data: fallbackHash,
+    error: sendError,
+    isPending: isSendPending,
+  } = useSendTransaction();
+  const activeHash = contractHash ?? fallbackHash;
   const { isLoading: isConfirming, isSuccess: isConfirmed, error: confirmError } =
     useWaitForTransactionReceipt({
-      hash: txHash,
-      query: { enabled: Boolean(txHash) },
+      hash: activeHash,
+      query: { enabled: Boolean(activeHash) },
     });
 
   const [status, setStatus] = useState<GameStatus>("idle");
@@ -132,11 +145,11 @@ export default function Home() {
   }, [isConfirmed]);
 
   useEffect(() => {
-    if (writeError || confirmError) {
+    if (writeError || confirmError || sendError) {
       setError("Не удалось отправить транзакцию. Попробуйте снова.");
       setIsSubmitted(false);
     }
-  }, [writeError, confirmError]);
+  }, [writeError, confirmError, sendError]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -234,10 +247,6 @@ export default function Home() {
   const submitScore = useCallback(() => {
     if (status !== "finished") return;
     if (isSubmitted) return;
-    if (!leaderboardAddress) {
-      setError("Укажи NEXT_PUBLIC_LEADERBOARD_CONTRACT для фиксации результата.");
-      return;
-    }
     if (!isConnected || !address) {
       setError("Подключи wallet в Base App.");
       return;
@@ -249,17 +258,39 @@ export default function Home() {
     setError("");
     setIsSubmitted(true);
     try {
-      writeContract({
-        address: leaderboardAddress,
-        abi: leaderboardAbi,
-        functionName: "submitScore",
-        args: [BigInt(score), GAME_ID, BigInt(roundDayId)],
-      });
+      if (leaderboardAddress) {
+        writeContract({
+          address: leaderboardAddress,
+          abi: leaderboardAbi,
+          functionName: "submitScore",
+          args: [BigInt(score), GAME_ID, BigInt(roundDayId)],
+        });
+      } else {
+        const data = encodePacked(
+          ["string", "uint256", "uint256", "uint256"],
+          ["BodyaDaily", BigInt(score), GAME_ID, BigInt(roundDayId)]
+        );
+        sendTransaction({
+          to: address,
+          value: 0n,
+          data,
+        });
+      }
     } catch {
       setIsSubmitted(false);
       setError("Не удалось инициировать транзакцию.");
     }
-  }, [status, isSubmitted, isConnected, address, score, roundDayId, writeContract, leaderboardAddress]);
+  }, [
+    status,
+    isSubmitted,
+    isConnected,
+    address,
+    score,
+    roundDayId,
+    writeContract,
+    sendTransaction,
+    leaderboardAddress,
+  ]);
 
   useEffect(() => {
     if (status !== "finished") return;
@@ -270,7 +301,7 @@ export default function Home() {
     submitScore();
   }, [status, submitScore, roundStart, score, address, updateLocalLeaderboard]);
 
-  const submitting = isPending || isConfirming;
+  const submitting = isContractPending || isSendPending || isConfirming;
 
   return (
     <div className={styles.container}>
