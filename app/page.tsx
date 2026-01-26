@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 
 const ROUND_SECONDS = 30;
 const MAX_SCORE = 600;
-const GAME_ID = 1n;
+const GAME_ID = BigInt(1);
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const leaderboardAbi = [
