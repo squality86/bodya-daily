@@ -5,7 +5,7 @@
   gap: 1.5rem;
   padding: 1.5rem 1.25rem 2rem;
   background: radial-gradient(circle at top, #2a1242 0%, #0c0d1f 45%, #05060f 100%);
-  color: #2E5A1E;
+  color: #DE748C;
   position: relative;
   overflow: hidden;
 }
@@ -14,8 +14,8 @@
   text-align: center;
   font-size: 1rem;
   font-weight: 700;
-  color: #2E5A1E;
-  text-shadow: 0 0 12px rgba(46, 90, 30, 0.75);
+  color: #DE748C;
+  text-shadow: 0 0 12px rgba(222, 116, 140, 0.75);
 }
 
 .header {
@@ -49,8 +49,8 @@
 }
 
 .hurry {
-  color: #2E5A1E;
-  text-shadow: 0 0 12px rgba(46, 90, 30, 0.75);
+  color: #DE748C;
+  text-shadow: 0 0 12px rgba(222, 116, 140, 0.75);
 }
 
 .center {
@@ -127,7 +127,7 @@
   font-weight: 700;
   border-radius: 14px;
   background: linear-gradient(135deg, #ffcf55, #ff7ad9);
-  color: #2E5A1E;
+  color: #DE748C;
   cursor: pointer;
   box-shadow: 0 12px 24px rgba(255, 122, 217, 0.35);
   transition: transform 0.2s ease;
@@ -156,11 +156,11 @@
 .statusBadgeSuccess {
   background: rgba(108, 255, 180, 0.18);
   border-color: rgba(108, 255, 180, 0.45);
-  color: #2E5A1E;
+  color: #DE748C;
 }
 
 .error {
-  color: #2E5A1E;
+  color: #DE748C;
   font-size: 0.85rem;
   text-align: center;
 }
@@ -223,7 +223,7 @@
 }
 
 .baseLink {
-  color: #2E5A1E;
+  color: #DE748C;
   text-decoration: underline;
   text-underline-offset: 3px;
   font-weight: 600;
