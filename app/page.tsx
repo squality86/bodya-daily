@@ -67,6 +67,11 @@ const formatTxError = (error: unknown) => {
   return "Неизвестная ошибка транзакции.";
 };
 
+const baseAppUrl = (() => {
+  const appUrl = process.env.NEXT_PUBLIC_URL || "https://bodya-daily.vercel.app";
+  return `https://base.app/preview?appUrl=${encodeURIComponent(appUrl)}`;
+})();
+
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { address, isConnected } = useAccount();
@@ -383,6 +388,9 @@ export default function Home() {
       </section>
 
       <footer className={styles.footer}>
+        <a className={styles.baseLink} href={baseAppUrl} target="_blank" rel="noreferrer">
+          Открыть в Base App
+        </a>
         <span>{minikitConfig.miniapp.name}</span>
         <span>{context?.user?.displayName ? `Привет, ${context.user.displayName}` : "Base App"}</span>
         <span>{address ? shortAddress(address) : "Wallet не подключен"}</span>
